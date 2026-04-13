@@ -48,14 +48,22 @@ typedef enum
     CMD_RANGE_QUERY,
     CMD_LCA,
     CMD_PREDECESSOR,
+    CMD_SUCCESSOR,
     CMD_MIRROR,
     CMD_COPY,
     CMD_MERGE,
     CMD_INTERSPECT,
     CMD_IS_SUBTREE,
-    CMD_PRINT_ALL
+    CMD_PRINT_ALL,
     CMD_ERR
 } CMD_TYPE;
+
+typedef enum
+{
+    TREE_A,
+    TREE_B,
+    TREE_C
+} TREES_LIST;
 
 struct node
 {
@@ -101,18 +109,44 @@ typedef struct binary_trees
     void    (*print_all)(binary_trees_t* self);
 } binary_trees_t;
 
-struct type_command
+struct map
 {
     char* command;
     CMD_TYPE type;
 };
 
-static struct type_command cmd_dict[] = {
-    {},
-    {},
-    {},
-    {"print_all",            CMD_PRINT_ALL},
+static struct map cmd_dict[] = {
+    {"insert", CMD_INSERT},
+    {"delete", CMD_DELETE},
+    {"search", CMD_SEARCH},
+    {"min", CMD_MIN},
+    {"max", CMD_MAX},
+    {"size", CMD_SIZE},
+    {"height", CMD_HEIGHT},
+    {"inorder", CMD_INORDER},
+    {"preorder", CMD_PREORDER},
+    {"postorder", CMD_POSTORDER},
+    {"clear", CMD_CLEAR},
+    {"kth_min", CMD_KTH_MIN},
+    {"kth_max", CMD_KTH_MAX},
+    {"count_range", CMD_COUNT_RANGE},
+    {"range_query", CMD_RANGE_QUERY},
+    {"lca", CMD_LCA},
+    {"predecessor", CMD_PREDECESSOR},
+    {"successor", CMD_SUCCESSOR},
+    {"mirror", CMD_MIRROR},
+    {"copy", CMD_COPY},
+    {"merge", CMD_MERGE},
+    {"intersect", CMD_INTERSPECT},
+    {"is_subtree", CMD_IS_SUBTREE},
+    {"print_all", CMD_PRINT_ALL},
     {NULL, CMD_ERR}
+};
+
+static struct map trees_list[] = {
+    {"TREE_A", TREE_A},
+    {"TREE_B", TREE_B},
+    {"TREE_C", TREE_C}
 }
 
 void tree_init(binary_trees_t* tree)
