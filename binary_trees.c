@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 #include <stdlib.h>
 
 typedef struct node node_t;
@@ -116,38 +117,38 @@ struct map
 };
 
 static struct map cmd_dict[] = {
-    {"insert", CMD_INSERT},
-    {"delete", CMD_DELETE},
-    {"search", CMD_SEARCH},
-    {"min", CMD_MIN},
-    {"max", CMD_MAX},
-    {"size", CMD_SIZE},
-    {"height", CMD_HEIGHT},
-    {"inorder", CMD_INORDER},
-    {"preorder", CMD_PREORDER},
-    {"postorder", CMD_POSTORDER},
-    {"clear", CMD_CLEAR},
-    {"kth_min", CMD_KTH_MIN},
-    {"kth_max", CMD_KTH_MAX},
+    {"insert",      CMD_INSERT},
+    {"delete",      CMD_DELETE},
+    {"search",      CMD_SEARCH},
+    {"min",         CMD_MIN},
+    {"max",         CMD_MAX},
+    {"size",        CMD_SIZE},
+    {"height",      CMD_HEIGHT},
+    {"inorder",     CMD_INORDER},
+    {"preorder",    CMD_PREORDER},
+    {"postorder",   CMD_POSTORDER},
+    {"clear",       CMD_CLEAR},
+    {"kth_min",     CMD_KTH_MIN},
+    {"kth_max",     CMD_KTH_MAX},
     {"count_range", CMD_COUNT_RANGE},
     {"range_query", CMD_RANGE_QUERY},
-    {"lca", CMD_LCA},
+    {"lca",         CMD_LCA},
     {"predecessor", CMD_PREDECESSOR},
-    {"successor", CMD_SUCCESSOR},
-    {"mirror", CMD_MIRROR},
-    {"copy", CMD_COPY},
-    {"merge", CMD_MERGE},
-    {"intersect", CMD_INTERSPECT},
-    {"is_subtree", CMD_IS_SUBTREE},
-    {"print_all", CMD_PRINT_ALL},
-    {NULL, CMD_ERR}
+    {"successor",   CMD_SUCCESSOR},
+    {"mirror",      CMD_MIRROR},
+    {"copy",        CMD_COPY},
+    {"merge",       CMD_MERGE},
+    {"intersect",   CMD_INTERSPECT},
+    {"is_subtree",  CMD_IS_SUBTREE},
+    {"print_all",   CMD_PRINT_ALL},
+    {NULL,          CMD_ERR}
 };
 
 static struct map trees_list[] = {
     {"TREE_A", TREE_A},
     {"TREE_B", TREE_B},
     {"TREE_C", TREE_C}
-}
+};
 
 void tree_init(binary_trees_t* tree)
 {   
@@ -156,7 +157,7 @@ void tree_init(binary_trees_t* tree)
         return;
     }
 
-    tree->size_tree = 0;
+    tree->size_tree   = 0;
     tree->height_tree = 0;
 
     tree->insert      = insert;
@@ -190,6 +191,10 @@ int main(void)
 
     binary_trees_t woodland[3] = {0};
 
+    tree_init(&woodland[TREE_A]);
+    tree_init(&woodland[TREE_B]);
+    tree_init(&woodland[TREE_C]);
+
     uint32_t N;
     scanf("%d", &N);
 
@@ -202,6 +207,11 @@ int main(void)
     for(size_t i = 0; i < N; i++) {
         if(fgets(buffer, sizeof(buffer), stdin) == NULL) {
             return;
+        }
+
+        command = strtok(buffer, " ");
+        if(command == NULL) {
+            continue;
         }
 
 
