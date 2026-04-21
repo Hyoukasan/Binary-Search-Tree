@@ -69,7 +69,7 @@ typedef enum
 
 struct node
 {
-    int key;
+    int data;
     node_t *left, *right;
 };
 
@@ -184,7 +184,17 @@ void tree_init(binary_trees_t* tree)
     tree->print_all   = print_all;
 }
 
+node_t* create_node(int data)
+{
+    node_t* new_node = (node_t*)malloc(sizeof(node_t));
+    if(new_node == NULL) {
+        printf("error\n");
+    }
 
+    new_node->data = data;
+    new_node->left = new_node->right = NULL;
+    return new_node;
+}
 
 int main(void)
 {
