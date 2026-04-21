@@ -196,6 +196,34 @@ node_t* create_node(int data)
     return new_node;
 }
 
+void insert(binary_trees_t* self, int X)
+{
+    node_t** tmp_ptr = &self->root;
+
+    while(*tmp_ptr != NULL) {
+        if((*tmp_ptr)->data > X) {
+            tmp_ptr = &(*tmp_ptr)->left;
+        } else if((*tmp_ptr)->data < X) {
+            tmp_ptr = &(*tmp_ptr)->right;
+        } else return;
+    }
+
+
+    *tmp_ptr = create_node(X);
+    self->size_tree++;
+
+}
+
+void delete(binary_trees_t* self)
+{
+    if(self->root == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    
+}
+
 int main(void)
 {
 
@@ -226,4 +254,5 @@ int main(void)
 
 
     }
+
 }
