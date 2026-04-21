@@ -77,9 +77,6 @@ struct binary_trees
 {
     node_t *root;
 
-    size_t size_tree;
-    size_t height_tree;
-
     /*general commands*/
 
     void    (*insert)(binary_trees_t* self, int X);
@@ -155,9 +152,6 @@ void tree_init(binary_trees_t* tree)
 {   
     tree->root = NULL;
 
-    tree->size_tree   = 0;
-    tree->height_tree = 0;
-
     tree->insert      = insert;
     tree->delete      = delete;
     tree->search      = search;
@@ -210,18 +204,34 @@ void insert(binary_trees_t* self, int X)
 
 
     *tmp_ptr = create_node(X);
-    self->size_tree++;
-
 }
 
-void delete(binary_trees_t* self)
+void delete(binary_trees_t* self, int X)
 {
     if(self->root == NULL) {
         printf("error\n");
         return;
     }
 
-    
+    while()
+}
+
+void search(binary_trees_t* self, int X)
+{
+    node_t* tmp_ptr = self->root;
+
+    while(tmp_ptr != NULL) {
+        if(tmp_ptr->data > X) {
+            tmp_ptr = tmp_ptr->left;
+        } else if(tmp_ptr->data < X) {
+            tmp_ptr = tmp_ptr->right;
+        } else {
+            printf("found\n");
+            return;
+        }
+    }
+
+    printf("not found\n");
 }
 
 int main(void)
