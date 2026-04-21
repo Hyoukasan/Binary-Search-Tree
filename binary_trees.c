@@ -3,13 +3,14 @@
 #include <string.h>
 #include <stdlib.h>
 
+typedef struct binary_trees binary_trees_t;
 typedef struct node node_t;
 
 void   insert(binary_trees_t* self, int X);
 void   delete(binary_trees_t* self, int X);
 void   search(binary_trees_t* self, int X);
-void   max(binary_trees_t* self);
-void   min(binary_trees_t* self);
+void   max_value(binary_trees_t* self);
+void   min_value(binary_trees_t* self);
 void   size(binary_trees_t* self);
 void   height(binary_trees_t* self);
 void   inorder(binary_trees_t* self);
@@ -72,7 +73,7 @@ struct node
     node_t *left, *right;
 };
 
-typedef struct binary_trees
+struct binary_trees
 {
     node_t *root;
 
@@ -108,7 +109,7 @@ typedef struct binary_trees
     void    (*intersect)(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
     void    (*is_subtree)(binary_trees_t* tree_1, binary_trees_t* tree_2);
     void    (*print_all)(binary_trees_t* self);
-} binary_trees_t;
+};
 
 struct map
 {
@@ -152,10 +153,7 @@ static struct map trees_list[] = {
 
 void tree_init(binary_trees_t* tree)
 {   
-    tree->root = malloc(sizeof(binary_trees_t));
-    if(tree->root == NULL) {
-        return;
-    }
+    tree->root = NULL;
 
     tree->size_tree   = 0;
     tree->height_tree = 0;
@@ -163,8 +161,8 @@ void tree_init(binary_trees_t* tree)
     tree->insert      = insert;
     tree->delete      = delete;
     tree->search      = search;
-    tree->max         = max;
-    tree->min         = min;
+    tree->max         = max_value;
+    tree->min         = min_value;
     tree->size        = size;
     tree->height      = height;
     tree->inorder     = inorder;
@@ -185,6 +183,8 @@ void tree_init(binary_trees_t* tree)
     tree->is_subtree  = is_subtree;
     tree->print_all   = print_all;
 }
+
+
 
 int main(void)
 {
