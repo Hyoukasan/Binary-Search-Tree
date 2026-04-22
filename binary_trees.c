@@ -139,14 +139,12 @@ static struct map cmd_dict[] = {
     {"intersect",   CMD_INTERSPECT},
     {"is_subtree",  CMD_IS_SUBTREE},
     {"print_all",   CMD_PRINT_ALL},
-    {NULL,          CMD_ERR}
 };
 
 static struct map trees_list[] = {
     {"TREE_A", TREE_A},
     {"TREE_B", TREE_B},
     {"TREE_C", TREE_C},
-    {NULL, CMD_ERR}
 };
 
 void tree_init(binary_trees_t* tree)
@@ -352,20 +350,24 @@ void postorder(binary_trees_t* self)
 
 CMD_TYPE search_cmd_table(char* arg)
 {   
-    for(size_t i = 0; cmd_dict[i].command == NULL; i++) {
+    for(size_t i = 0; cmd_dict[i].command != NULL; i++) {
         if(strcmp(cmd_dict[i].command, arg) == 1) {
             return cmd_dict[i].type;
         }
     }
+
+    return CMD_ERR;
 }
 
 TREES_LIST search_tree_table(char* arg)
 {   
-    for(size_t i = 0; trees_list[i].command == NULL; i++) {
+    for(size_t i = 0; trees_list[i].command != NULL; i++) {
         if(strcmp(trees_list[i].command, arg) == 1) {
             return trees_list[i].type;
         }
     }
+
+    return CMD_ERR;
 }
 
 int main(void)
@@ -473,4 +475,5 @@ int main(void)
 
     }
 
+    return 0;
 }
