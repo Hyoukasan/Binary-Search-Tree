@@ -64,7 +64,8 @@ typedef enum
 {
     TREE_A,
     TREE_B,
-    TREE_C
+    TREE_C,
+    TREE_ERR
 } TREES_LIST;
 
 struct node
@@ -108,13 +109,18 @@ struct binary_trees
     void    (*print_all)(binary_trees_t* self);
 };
 
-struct map
+struct cmd_map
 {
-    char* command;
+    char *command;
     CMD_TYPE type;
 };
 
-static struct map cmd_dict[] = {
+struct tree_map
+{
+    char *command;
+    TREES_LIST type;
+};
+static struct cmd_map cmd_dict[] = {
     {"insert",      CMD_INSERT},
     {"delete",      CMD_DELETE},
     {"search",      CMD_SEARCH},
@@ -139,12 +145,14 @@ static struct map cmd_dict[] = {
     {"intersect",   CMD_INTERSPECT},
     {"is_subtree",  CMD_IS_SUBTREE},
     {"print_all",   CMD_PRINT_ALL},
+    {NULL,          CMD_ERR}
 };
 
-static struct map trees_list[] = {
+static struct tree_map trees_list[] = {
     {"TREE_A", TREE_A},
     {"TREE_B", TREE_B},
     {"TREE_C", TREE_C},
+    {NULL,     TREE_ERR}
 };
 
 void tree_init(binary_trees_t* tree)
@@ -155,7 +163,7 @@ void tree_init(binary_trees_t* tree)
     tree->delete      = delete;
     tree->search      = search;
     tree->max_value   = max_value;
-    tree->max_value   = min_value;
+    tree->min_value   = min_value;
     tree->size        = size;
     tree->height      = height;
     tree->inorder     = inorder;
@@ -351,7 +359,7 @@ void postorder(binary_trees_t* self)
 CMD_TYPE search_cmd_table(char* arg)
 {   
     for(size_t i = 0; cmd_dict[i].command != NULL; i++) {
-        if(strcmp(cmd_dict[i].command, arg) == 1) {
+        if(strcmp(cmd_dict[i].command, arg) == 0) {
             return cmd_dict[i].type;
         }
     }
@@ -362,12 +370,12 @@ CMD_TYPE search_cmd_table(char* arg)
 TREES_LIST search_tree_table(char* arg)
 {   
     for(size_t i = 0; trees_list[i].command != NULL; i++) {
-        if(strcmp(trees_list[i].command, arg) == 1) {
+        if(strcmp(trees_list[i].command, arg) == 0) {
             return trees_list[i].type;
         }
     }
 
-    return CMD_ERR;
+    return TREE_ERR;
 }
 
 int main(void)
@@ -380,7 +388,7 @@ int main(void)
     tree_init(&woodland[TREE_C]);
 
     uint32_t N;
-    scanf("%d", &N);
+    scanf("%u", &N);
 
     while(getchar() != '\n');
 
@@ -393,7 +401,7 @@ int main(void)
 
     for(size_t i = 0; i < N; i++) {
         if(fgets(buffer, sizeof(buffer), stdin) == NULL) {
-            return;
+            return 1;
         }
 
         buffer[strcspn(buffer, "\n\r")] = '\0';
@@ -407,7 +415,7 @@ int main(void)
 
         args[1] = strtok(NULL, " ");
         tree_type = search_tree_table(args[1]);
-        if(tree_type == CMD_ERR) {
+        if(tree_type == TREE_ERR) {
             printf("error\n");
             continue;
         }
