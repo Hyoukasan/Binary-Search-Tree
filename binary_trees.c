@@ -397,7 +397,7 @@ int main(void)
         buffer[strcspn(buffer, "\n\r")] = '\0';
 
         args[0] = strtok(buffer, " ");
-        command_type = (args[0]);
+        command_type = search_cmd_table(args[0]);
         if(command_type == CMD_ERR) {
             printf("error\n");
             continue;
