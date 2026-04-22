@@ -54,7 +54,7 @@ typedef enum
     CMD_MIRROR,
     CMD_COPY,
     CMD_MERGE,
-    CMD_INTERSPECT,
+    CMD_INTERSECT,
     CMD_IS_SUBTREE,
     CMD_PRINT_ALL,
     CMD_ERR
@@ -142,7 +142,7 @@ static struct cmd_map cmd_dict[] = {
     {"mirror",      CMD_MIRROR},
     {"copy",        CMD_COPY},
     {"merge",       CMD_MERGE},
-    {"intersect",   CMD_INTERSPECT},
+    {"intersect",   CMD_INTERSECT},
     {"is_subtree",  CMD_IS_SUBTREE},
     {"print_all",   CMD_PRINT_ALL},
     {NULL,          CMD_ERR}
@@ -190,6 +190,7 @@ node_t* create_node(int data)
     node_t* new_node = (node_t*)malloc(sizeof(node_t));
     if(new_node == NULL) {
         printf("error\n");
+        return NULL;
     }
 
     new_node->data = data;
@@ -474,6 +475,63 @@ int main(void)
             }
 
             printf("%d\n", result);
+            break;
+        
+        case CMD_SIZE:
+            break;
+
+        case CMD_HEIGHT:
+            break;
+
+        case CMD_INORDER:
+            break;
+
+        case CMD_PREORDER:
+            break;
+
+        case CMD_POSTORDER:
+            break;
+
+        case CMD_CLEAR:
+            break;
+        
+        case CMD_KTH_MIN:
+            break;
+
+        case CMD_KTH_MAX:
+            break;
+        
+        case CMD_COUNT_RANGE:
+            break;
+
+        case CMD_RANGE_QUERY:
+            break;
+        
+        case CMD_LCA:
+            break;
+        
+        case CMD_PREDECESSOR:
+            break;
+
+        case CMD_SUCCESSOR:
+            break;
+
+        case CMD_MIRROR:
+            break;
+
+        case CMD_COPY:
+            break;
+        
+        case CMD_MERGE:
+            break;
+
+        case CMD_INTERSECT:
+            break;
+
+        case CMD_IS_SUBTREE:
+            break;
+        
+        case CMD_PRINT_ALL:
             break;
             
         default:
