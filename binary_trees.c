@@ -380,6 +380,105 @@ void height_tree(binary_trees_t* self)
     printf("%zu\n", self->height);
 }
 
+void clear(binary_trees_t* self)
+{
+    (void)self;
+    printf("error\n");
+}
+
+void kth_min(binary_trees_t* self, int K)
+{
+    (void)self;
+    (void)K;
+    printf("error\n");
+}
+
+void kth_max(binary_trees_t* self, int K)
+{
+    (void)self;
+    (void)K;
+    printf("error\n");
+}
+
+void count_range(binary_trees_t* self, int L, int R)
+{
+    (void)self;
+    (void)L;
+    (void)R;
+    printf("error\n");
+}
+
+void range_query(binary_trees_t* self, int L, int R)
+{
+    (void)self;
+    (void)L;
+    (void)R;
+    printf("error\n");
+}
+
+void lca(binary_trees_t* self, int X, int Y)
+{
+    (void)self;
+    (void)X;
+    (void)Y;
+    printf("error\n");
+}
+
+void predecessor(binary_trees_t* self, int X)
+{
+    (void)self;
+    (void)X;
+    printf("error\n");
+}
+
+void successor(binary_trees_t* self, int X)
+{
+    (void)self;
+    (void)X;
+    printf("error\n");
+}
+
+void mirror(binary_trees_t* self)
+{
+    (void)self;
+    printf("error\n");
+}
+
+void copy(binary_trees_t* src, binary_trees_t* dest)
+{
+    (void)src;
+    (void)dest;
+    printf("error\n");
+}
+
+void merge(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
+{
+    (void)src_1;
+    (void)src_2;
+    (void)dest;
+    printf("error\n");
+}
+
+void intersect(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
+{
+    (void)src_1;
+    (void)src_2;
+    (void)dest;
+    printf("error\n");
+}
+
+void is_subtree(binary_trees_t* tree_1, binary_trees_t* tree_2)
+{
+    (void)tree_1;
+    (void)tree_2;
+    printf("error\n");
+}
+
+void print_all(binary_trees_t* self)
+{
+    (void)self;
+    printf("error\n");
+}
 
 CMD_TYPE search_cmd_table(char* arg)
 {   
@@ -504,9 +603,11 @@ int main(void)
             break;
         
         case CMD_SIZE:
+            woodland[tree_type].size_tree(&woodland[tree_type]);
             break;
 
         case CMD_HEIGHT:
+            woodland[tree_type].height_tree(&woodland[tree_type]);
             break;
 
         case CMD_INORDER:
