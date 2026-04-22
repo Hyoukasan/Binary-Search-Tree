@@ -9,8 +9,8 @@ typedef struct node node_t;
 void   insert(binary_trees_t* self, int X);
 void   delete(binary_trees_t* self, int X);
 void   search(binary_trees_t* self, int X);
-void   max_value(binary_trees_t* self);
-void   min_value(binary_trees_t* self);
+int    max_value(binary_trees_t* self);
+int    min_value(binary_trees_t* self);
 void   size(binary_trees_t* self);
 void   height(binary_trees_t* self);
 void   inorder(binary_trees_t* self);
@@ -206,6 +206,14 @@ void insert(binary_trees_t* self, int X)
     *tmp_ptr = create_node(X);
 }
 
+node_t* find_min_node(node_t* node)
+{
+    while (node->left != NULL) {
+        node = node->left;
+    }
+    return node;
+}
+
 void delete(binary_trees_t* self, int X)
 {
     if(self->root == NULL) {
@@ -213,7 +221,18 @@ void delete(binary_trees_t* self, int X)
         return;
     }
 
-    while()
+    node_t* tmp_ptr = self->root;
+
+    while(tmp_ptr != NULL) {
+        if(tmp_ptr->data > X) {
+            tmp_ptr = tmp_ptr->left;
+        } else if(tmp_ptr->data < X) {
+            tmp_ptr = tmp_ptr->right;
+        } else {
+            break;
+        }
+    }
+
 }
 
 void search(binary_trees_t* self, int X)
@@ -232,6 +251,102 @@ void search(binary_trees_t* self, int X)
     }
 
     printf("not found\n");
+}
+
+int max_value(binary_trees_t* self)
+{
+    if(self->root == NULL) {
+        return INT_MAX;
+    }
+
+    node_t* tmp_ptr = self->root;
+
+    while(tmp_ptr->right != NULL) {
+        tmp_ptr = tmp_ptr->right;
+    }
+
+    return tmp_ptr->data;
+}
+
+int min_value(binary_trees_t* self)
+{
+    if(self->root == NULL) {
+        return INT_MAX;
+    }
+
+    node_t* tmp_ptr = self->root;
+
+    while(tmp_ptr->left != NULL) {
+        tmp_ptr = tmp_ptr->left;
+    }
+
+    return tmp_ptr->data;
+}
+
+void inorder_node(node_t* root)
+{
+    if(root == NULL) {
+        return;
+    }
+
+    inorder_node(root->left);
+    printf("%d ", root->data);
+    inorder_node(root->right);
+}
+
+void inorder(binary_trees_t* self)
+{
+    if(self->root == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    inorder_node(self->root);
+    printf("\n");
+}
+
+void preorder_node(node_t* root)
+{
+    if(root == NULL) {
+        return;
+    }
+
+    printf("%d ", root->data);
+    preorder_node(root->left);
+    preorder_node(root->right);
+}
+
+void preorder(binary_trees_t* self)
+{
+    if(self->root == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    preorder_node(self->root);
+    printf("\n");
+}
+
+void postorder_node(node_t* root)
+{
+    if(root == NULL) {
+        return;
+    }
+
+    postorder_node(root->left);
+    postorder_node(root->right);
+    printf("%d ", root->data);
+}
+
+void postorder(binary_trees_t* self)
+{
+    if(self->root == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    postorder_node(self->root);
+    printf("\n");
 }
 
 int main(void)
