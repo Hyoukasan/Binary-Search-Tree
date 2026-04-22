@@ -167,8 +167,8 @@ void tree_init(binary_trees_t* tree)
     tree->search      = search;
     tree->max_value   = max_value;
     tree->min_value   = min_value;
-    tree->size        = size_tree;
-    tree->height      = height_tree;
+    tree->size_tree   = size_tree;
+    tree->height_tree = height_tree;
     tree->inorder     = inorder;
     tree->preorder    = preorder;
     tree->postorder   = postorder;
@@ -204,19 +204,26 @@ node_t* create_node(int data)
 void insert(binary_trees_t* self, int X)
 {
     node_t** tmp_ptr = &self->root;
+    size_t depth = 1;
 
     while(*tmp_ptr != NULL) {
         if((*tmp_ptr)->data > X) {
             tmp_ptr = &(*tmp_ptr)->left;
         } else if((*tmp_ptr)->data < X) {
             tmp_ptr = &(*tmp_ptr)->right;
-        } else return;
+        } else {
+            return;
+        }
+        depth++;
     }
 
 
     *tmp_ptr = create_node(X);
-    if(*tmp_ptr == NULL) {
-        printf("error\n");
+    if(*tmp_ptr != NULL) {
+        self->size++;
+        if(depth > self->height) {
+            self->height = depth;
+        }
     }
 }
 
@@ -362,6 +369,17 @@ void postorder(binary_trees_t* self)
     postorder_node(self->root);
     printf("\n");
 }
+
+void size_tree(binary_trees_t* self)
+{
+    printf("%zu\n", self->size);
+}
+
+void height_tree(binary_trees_t* self)
+{
+    printf("%zu\n", self->height);
+}
+
 
 CMD_TYPE search_cmd_table(char* arg)
 {   
