@@ -82,8 +82,8 @@ struct binary_trees
     void    (*insert)(binary_trees_t* self, int X);
     void    (*delete)(binary_trees_t* self, int X);
     void    (*search)(binary_trees_t* self, int X);
-    void    (*max)(binary_trees_t* self);
-    void    (*min)(binary_trees_t* self);
+    int     (*max_value)(binary_trees_t* self);
+    int     (*min_value)(binary_trees_t* self);
     void    (*size)(binary_trees_t* self);
     void    (*height)(binary_trees_t* self);
     void    (*inorder)(binary_trees_t* self);
@@ -156,8 +156,8 @@ void tree_init(binary_trees_t* tree)
     tree->insert      = insert;
     tree->delete      = delete;
     tree->search      = search;
-    tree->max         = max_value;
-    tree->min         = min_value;
+    tree->max_value   = max_value;
+    tree->max_value   = min_value;
     tree->size        = size;
     tree->height      = height;
     tree->inorder     = inorder;
@@ -352,7 +352,7 @@ void postorder(binary_trees_t* self)
 
 CMD_TYPE search_cmd_table(char* arg)
 {   
-    for(size_t i = 0; cmd_dict[i].command == NULL) {
+    for(size_t i = 0; cmd_dict[i].command == NULL; i++) {
         if(strcmp(cmd_dict[i].command, arg) == 1) {
             return cmd_dict[i].type;
         }
@@ -361,7 +361,7 @@ CMD_TYPE search_cmd_table(char* arg)
 
 TREES_LIST search_tree_table(char* arg)
 {   
-    for(size_t i = 0; trees_list[i].command == NULL) {
+    for(size_t i = 0; trees_list[i].command == NULL; i++) {
         if(strcmp(trees_list[i].command, arg) == 1) {
             return trees_list[i].type;
         }
@@ -387,7 +387,7 @@ int main(void)
     CMD_TYPE command_type;
     TREES_LIST tree_type;
 
-    int value, K, L, R;
+    int value, K, L, R, result;
 
     for(size_t i = 0; i < N; i++) {
         if(fgets(buffer, sizeof(buffer), stdin) == NULL) {
@@ -423,10 +423,51 @@ int main(void)
             }
 
             value = atoi(args[2]);
-
+            woodland[tree_type].insert(&woodland[tree_type], value);
             break;
         
+        case CMD_DELETE:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            value = atoi(args[2]);
+            woodland[tree_type].delete(&woodland[tree_type], value);
+            break;
+        
+        case CMD_SEARCH:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            value = atoi(args[2]);
+            woodland[tree_type].search(&woodland[tree_type], value);
+            break;
+
+        case CMD_MIN:
+            result = woodland[tree_type].min_value(&woodland[tree_type]);
+            if(result == INT_MAX) {
+                printf("error\n");
+                break;
+            }
+
+            printf("%d\n", result);
+            break;
+        
+        case CMD_MAX:
+            result = woodland[tree_type].max_value(&woodland[tree_type]);
+            if(result == INT_MAX) {
+                printf("error\n");
+                break;
+            }
+
+            printf("%d\n", result);
+            break;
+            
         default:
+            printf("error\n");
             break;
         }
 
