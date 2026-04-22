@@ -392,17 +392,65 @@ void height_tree(binary_trees_t* self)
     printf("%zu\n", self->height);
 }
 
+void clear_node(node_t* node)
+{
+    if(node != NULL) {
+        clear_node(node->left);
+        clear_node(node->right);
+        free(node);
+    }
+}
+
 void clear(binary_trees_t* self)
 {
-    (void)self;
-    printf("error\n");
+    if(self->root != NULL) {
+        clear_node(self->root);
+        self->root = NULL;
+        self->size = 0;
+        self->height = 0;
+    }
+}
+
+void kth_min_node(node_t* node, int K, int* count, int* result, int* found)
+{
+    if (node == NULL || *found) {
+        return;
+    }
+
+    kth_min_node(node->left, K, count, result, found);
+
+    if (*found) {
+        return;
+    }
+
+    (*count)++;
+    if (*count == K) {
+        *result = node->data;
+        *found = 1;
+        return;
+    }
+
+    kth_min_node(node->right, K, count, result, found);
 }
 
 void kth_min(binary_trees_t* self, int K)
 {
-    (void)self;
-    (void)K;
-    printf("error\n");
+    if(self->root == NULL || K <= 0 || K > (int)self->size) {
+        printf("error\n");
+        return;
+    }
+
+    int count = 0;
+    int result = 0;
+    int found = 0;
+
+    kth_min_node(self->root, K, &count, &result, &found);
+
+    if (found) {
+        printf("%d\n", result);
+    } else {
+        printf("error\n");
+    }
 }
 
 void kth_max(binary_trees_t* self, int K)
@@ -483,12 +531,6 @@ void is_subtree(binary_trees_t* tree_1, binary_trees_t* tree_2)
 {
     (void)tree_1;
     (void)tree_2;
-    printf("error\n");
-}
-
-void print_all(binary_trees_t* self)
-{
-    (void)self;
     printf("error\n");
 }
 
@@ -635,6 +677,7 @@ int main(void)
             break;
 
         case CMD_CLEAR:
+            woodland[tree_type].clear(&woodland[tree_type]);
             break;
         
         case CMD_KTH_MIN:
