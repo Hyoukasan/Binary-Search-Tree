@@ -446,26 +446,76 @@ void kth_min(binary_trees_t* self, int K)
 
     kth_min_node(self->root, K, &count, &result, &found);
 
-    if (found) {
+    if (found != 0) {
         printf("%d\n", result);
     } else {
         printf("error\n");
     }
 }
 
+void kth_max_node(node_t* node, int K, int* count, int* result, int* found)
+{
+    if (node == NULL || *found) {
+        return;
+    }
+
+    kth_max_node(node->right, K, count, result, found);
+
+    if (*found) {
+        return;
+    }
+
+    (*count)++;
+    if (*count == K) {
+        *result = node->data;
+        *found = 1;
+        return;
+    }
+
+    kth_max_node(node->left, K, count, result, found);
+}
+
 void kth_max(binary_trees_t* self, int K)
 {
-    (void)self;
-    (void)K;
-    printf("error\n");
+    if(self->root == NULL || K <= 0 || K > (int)self->size) {
+        printf("error\n");
+        return;
+    }
+
+    int count = 0;
+    int result = 0;
+    int found = 0;
+
+    kth_max_node(self->root, K, &count, &result, &found);
+
+    if (found != 0) {
+        printf("%d\n", result);
+    } else {
+        printf("error\n");
+    }
+}
+
+size_t count_range_node(node_t* node, int L, int R)
+{
+    if(node == NULL) {
+        return 0;
+    }
+
+    if(node->data < L) {
+        return count_range_node(node->right, L, R);
+    } else if(node->data > R) {
+        return count_range_node(node->left, L, R);
+    } else return 1 + count_range_node(node->right, L, R) + count_range_node(node->left, L, R);
 }
 
 void count_range(binary_trees_t* self, int L, int R)
 {
-    (void)self;
-    (void)L;
-    (void)R;
-    printf("error\n");
+    if(L > R){
+        printf("error\n");
+        return;
+    }
+
+    printf("%zu\n", count_range_node(self->root, L, R));
 }
 
 void range_query(binary_trees_t* self, int L, int R)
@@ -681,9 +731,23 @@ int main(void)
             break;
         
         case CMD_KTH_MIN:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            K = atoi(args[2]);
+            woodland[tree_type].kth_min(&woodland[tree_type], K);
             break;
 
         case CMD_KTH_MAX:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            K = atoi(args[2]);
+            woodland[tree_type].kth_max(&woodland[tree_type], K);
             break;
         
         case CMD_COUNT_RANGE:
