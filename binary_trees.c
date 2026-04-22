@@ -145,7 +145,8 @@ static struct map cmd_dict[] = {
 static struct map trees_list[] = {
     {"TREE_A", TREE_A},
     {"TREE_B", TREE_B},
-    {"TREE_C", TREE_C}
+    {"TREE_C", TREE_C},
+    {NULL, CMD_ERR}
 };
 
 void tree_init(binary_trees_t* tree)
@@ -349,6 +350,24 @@ void postorder(binary_trees_t* self)
     printf("\n");
 }
 
+CMD_TYPE search_cmd_table(char* arg)
+{   
+    for(size_t i = 0; cmd_dict[i].command == NULL) {
+        if(strcmp(cmd_dict[i].command, arg) == 1) {
+            return cmd_dict[i].type;
+        }
+    }
+}
+
+TREES_LIST search_tree_table(char* arg)
+{   
+    for(size_t i = 0; trees_list[i].command == NULL) {
+        if(strcmp(trees_list[i].command, arg) == 1) {
+            return trees_list[i].type;
+        }
+    }
+}
+
 int main(void)
 {
 
@@ -364,19 +383,52 @@ int main(void)
     while(getchar() != '\n');
 
     char buffer[100];
-    char* command;
-    char* args[4] = {NULL, NULL, NULL, NULL};
+    char* args[5] = {NULL, NULL, NULL, NULL, NULL};
+    CMD_TYPE command_type;
+    TREES_LIST tree_type;
+
+    int value, K, L, R;
 
     for(size_t i = 0; i < N; i++) {
         if(fgets(buffer, sizeof(buffer), stdin) == NULL) {
             return;
         }
 
-        command = strtok(buffer, " ");
-        if(command == NULL) {
+        buffer[strcspn(buffer, "\n\r")] = '\0';
+
+        args[0] = strtok(buffer, " ");
+        command_type = (args[0]);
+        if(command_type == CMD_ERR) {
+            printf("error\n");
             continue;
         }
 
+        args[1] = strtok(NULL, " ");
+        tree_type = search_tree_table(args[1]);
+        if(tree_type == CMD_ERR) {
+            printf("error\n");
+            continue;
+        }
+
+        args[2] = strtok(NULL, " ");
+        args[3] = strtok(NULL, " ");
+        args[4] = strtok(NULL, " ");
+
+        switch (command_type)
+        {
+        case CMD_INSERT:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            value = atoi(args[2]);
+
+            break;
+        
+        default:
+            break;
+        }
 
     }
 
