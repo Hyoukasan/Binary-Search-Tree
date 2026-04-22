@@ -242,18 +242,32 @@ void delete(binary_trees_t* self, int X)
         return;
     }
 
-    node_t* tmp_ptr = self->root;
+    node_t* parent = NULL;
+    node_t* current_ptr = self->root;
 
-    while(tmp_ptr != NULL) {
-        if(tmp_ptr->data > X) {
-            tmp_ptr = tmp_ptr->left;
-        } else if(tmp_ptr->data < X) {
-            tmp_ptr = tmp_ptr->right;
+
+    while(current_ptr != NULL && current_ptr->data != X) {
+        parent = current_ptr;
+
+        if(current_ptr->data > X) {
+            current_ptr = current_ptr->left;
         } else {
-            break;
+            current_ptr = current_ptr->right;
         }
     }
 
+    if (current_ptr == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    if(current_ptr->left != NULL && current_ptr->right != NULL) {
+
+    } else if(current_ptr->left != NULL || current_ptr->right != NULL) {
+
+    } else {
+
+    }
 }
 
 void search(binary_trees_t* self, int X)
@@ -318,7 +332,7 @@ void inorder_node(node_t* root)
 void inorder(binary_trees_t* self)
 {
     if(self->root == NULL) {
-        printf("error\n");
+        printf("empty\n");
         return;
     }
 
@@ -340,7 +354,7 @@ void preorder_node(node_t* root)
 void preorder(binary_trees_t* self)
 {
     if(self->root == NULL) {
-        printf("error\n");
+        printf("empty\n");
         return;
     }
 
@@ -362,7 +376,7 @@ void postorder_node(node_t* root)
 void postorder(binary_trees_t* self)
 {
     if(self->root == NULL) {
-        printf("error\n");
+        printf("empty\n");
         return;
     }
 
@@ -611,12 +625,15 @@ int main(void)
             break;
 
         case CMD_INORDER:
+            woodland[tree_type].inorder(&woodland[tree_type]);
             break;
 
         case CMD_PREORDER:
+            woodland[tree_type].preorder(&woodland[tree_type]);
             break;
 
         case CMD_POSTORDER:
+            woodland[tree_type].postorder(&woodland[tree_type]);
             break;
 
         case CMD_CLEAR:
