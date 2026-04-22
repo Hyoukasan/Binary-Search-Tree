@@ -109,7 +109,6 @@ struct binary_trees
     void    (*merge)(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
     void    (*intersect)(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
     void    (*is_subtree)(binary_trees_t* tree_1, binary_trees_t* tree_2);
-    void    (*print_all)(binary_trees_t* self);
 };
 
 struct cmd_map
@@ -185,7 +184,6 @@ void tree_init(binary_trees_t* tree)
     tree->merge       = merge;
     tree->intersect   = intersect;
     tree->is_subtree  = is_subtree;
-    tree->print_all   = print_all;
 }
 
 node_t* create_node(int data)
@@ -676,6 +674,9 @@ int main(void)
             break;
         
         case CMD_PRINT_ALL:
+            woodland[TREE_A].inorder(&woodland[TREE_A]);
+            woodland[TREE_B].inorder(&woodland[TREE_B]);
+            woodland[TREE_C].inorder(&woodland[TREE_C]);
             break;
 
         default:
