@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <limits.h>
 #include <stdlib.h>
 
 typedef struct binary_trees binary_trees_t;
@@ -11,8 +12,8 @@ void   delete(binary_trees_t* self, int X);
 void   search(binary_trees_t* self, int X);
 int    max_value(binary_trees_t* self);
 int    min_value(binary_trees_t* self);
-void   size(binary_trees_t* self);
-void   height(binary_trees_t* self);
+void   size_tree(binary_trees_t* self);
+void   height_tree(binary_trees_t* self);
 void   inorder(binary_trees_t* self);
 void   preorder(binary_trees_t* self);
 void   postorder(binary_trees_t* self);
@@ -78,6 +79,8 @@ struct binary_trees
 {
     node_t *root;
 
+    size_t size, height;
+
     /*general commands*/
 
     void    (*insert)(binary_trees_t* self, int X);
@@ -85,8 +88,8 @@ struct binary_trees
     void    (*search)(binary_trees_t* self, int X);
     int     (*max_value)(binary_trees_t* self);
     int     (*min_value)(binary_trees_t* self);
-    void    (*size)(binary_trees_t* self);
-    void    (*height)(binary_trees_t* self);
+    void    (*size_tree)(binary_trees_t* self);
+    void    (*height_tree)(binary_trees_t* self);
     void    (*inorder)(binary_trees_t* self);
     void    (*preorder)(binary_trees_t* self);
     void    (*postorder)(binary_trees_t* self);
@@ -164,8 +167,8 @@ void tree_init(binary_trees_t* tree)
     tree->search      = search;
     tree->max_value   = max_value;
     tree->min_value   = min_value;
-    tree->size        = size;
-    tree->height      = height;
+    tree->size        = size_tree;
+    tree->height      = height_tree;
     tree->inorder     = inorder;
     tree->preorder    = preorder;
     tree->postorder   = postorder;
@@ -212,6 +215,9 @@ void insert(binary_trees_t* self, int X)
 
 
     *tmp_ptr = create_node(X);
+    if(*tmp_ptr == NULL) {
+        printf("error\n");
+    }
 }
 
 node_t* find_min_node(node_t* node)
@@ -397,6 +403,8 @@ int main(void)
     char* args[5] = {NULL, NULL, NULL, NULL, NULL};
     CMD_TYPE command_type;
     TREES_LIST tree_type;
+    TREES_LIST src_type;
+    TREES_LIST dst_type;
 
     int value, K, L, R, result;
 
@@ -533,7 +541,7 @@ int main(void)
         
         case CMD_PRINT_ALL:
             break;
-            
+
         default:
             printf("error\n");
             break;
