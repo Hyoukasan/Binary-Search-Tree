@@ -505,7 +505,9 @@ size_t count_range_node(node_t* node, int L, int R)
         return count_range_node(node->right, L, R);
     } else if(node->data > R) {
         return count_range_node(node->left, L, R);
-    } else return 1 + count_range_node(node->right, L, R) + count_range_node(node->left, L, R);
+    } else return 1 
+                + count_range_node(node->right, L, R) 
+                + count_range_node(node->left, L, R);
 }
 
 void count_range(binary_trees_t* self, int L, int R)
@@ -518,12 +520,32 @@ void count_range(binary_trees_t* self, int L, int R)
     printf("%zu\n", count_range_node(self->root, L, R));
 }
 
+void range_query_node(node_t* node, int L, int R)
+{
+    if(node == NULL) {
+        return;
+    }
+
+    if(node->data < L) {
+        range_query_node(node->right, L, R);
+    } else if(node->data > R) {
+        range_query_node(node->left, L, R);
+    } else {
+        range_query_node(node->right, L, R);
+        printf("%d ", node->data);
+        range_query_node(node->left, L, R);
+    }
+}
+
 void range_query(binary_trees_t* self, int L, int R)
 {
-    (void)self;
-    (void)L;
-    (void)R;
-    printf("error\n");
+    if(L > R){
+        printf("error\n");
+        return;
+    }
+
+    range_query_node(self->root, L, R);
+    printf("\n");
 }
 
 void lca(binary_trees_t* self, int X, int Y)
@@ -751,33 +773,122 @@ int main(void)
             break;
         
         case CMD_COUNT_RANGE:
+            if(args[2] == NULL || args[3] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            L = atoi(args[2]);
+            R = atoi(args[3]);
+            woodland[tree_type].count_range(&woodland[tree_type], L, R);
             break;
 
         case CMD_RANGE_QUERY:
+            if(args[2] == NULL || args[3] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            L = atoi(args[2]);
+            R = atoi(args[3]);
+            woodland[tree_type].range_query(&woodland[tree_type], L, R);
             break;
         
         case CMD_LCA:
+            if(args[2] == NULL || args[3] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            value = atoi(args[2]);
+            result = atoi(args[3]);
+            woodland[tree_type].lca(&woodland[tree_type], value, result);
             break;
         
         case CMD_PREDECESSOR:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            value = atoi(args[2]);
+            woodland[tree_type].predecessor(&woodland[tree_type], value);
             break;
 
         case CMD_SUCCESSOR:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            value = atoi(args[2]);
+            woodland[tree_type].successor(&woodland[tree_type], value);
             break;
 
         case CMD_MIRROR:
+            woodland[tree_type].mirror(&woodland[tree_type]);
             break;
 
         case CMD_COPY:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            dst_type = search_tree_table(args[2]);
+            if(dst_type == TREE_ERR) {
+                printf("error\n");
+                break;
+            }
+
+            woodland[tree_type].copy(&woodland[tree_type], &woodland[dst_type]);
             break;
         
         case CMD_MERGE:
+            if(args[2] == NULL || args[3] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            src_type = search_tree_table(args[2]);
+            dst_type = search_tree_table(args[3]);
+            if(src_type == TREE_ERR || dst_type == TREE_ERR) {
+                printf("error\n");
+                break;
+            }
+
+            woodland[tree_type].merge(&woodland[tree_type], &woodland[src_type], &woodland[dst_type]);
             break;
 
         case CMD_INTERSECT:
+            if(args[2] == NULL || args[3] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            src_type = search_tree_table(args[2]);
+            dst_type = search_tree_table(args[3]);
+            if(src_type == TREE_ERR || dst_type == TREE_ERR) {
+                printf("error\n");
+                break;
+            }
+
+            woodland[tree_type].intersect(&woodland[tree_type], &woodland[src_type], &woodland[dst_type]);
             break;
 
         case CMD_IS_SUBTREE:
+            if(args[2] == NULL) {
+                printf("error\n");
+                break;
+            }
+
+            src_type = search_tree_table(args[2]);
+            if(src_type == TREE_ERR) {
+                printf("error\n");
+                break;
+            }
+
+            woodland[tree_type].is_subtree(&woodland[tree_type], &woodland[src_type]);
             break;
         
         case CMD_PRINT_ALL:
