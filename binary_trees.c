@@ -7,30 +7,30 @@
 typedef struct binary_trees binary_trees_t;
 typedef struct node node_t;
 
-void   insert(binary_trees_t* self, int X);
-void   delete(binary_trees_t* self, int X);
-void   search(binary_trees_t* self, int X);
-int    max_value(binary_trees_t* self);
-int    min_value(binary_trees_t* self);
-void   size_tree(binary_trees_t* self);
-void   height_tree(binary_trees_t* self);
-void   inorder(binary_trees_t* self);
-void   preorder(binary_trees_t* self);
-void   postorder(binary_trees_t* self);
-void   clear(binary_trees_t* self);
-void   kth_min(binary_trees_t* self, int K);
-void   kth_max(binary_trees_t* self, int K);
-void   count_range(binary_trees_t* self, int L, int R);
-void   range_query(binary_trees_t* self, int L, int R);
-void   lca(binary_trees_t* self, int X, int Y);
-void   predecessor(binary_trees_t* self, int X);
-void   successor(binary_trees_t* self, int X);
-void   mirror(binary_trees_t* self);
-void   copy(binary_trees_t* src, binary_trees_t* dest);
-void   merge(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
-void   intersect(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
-void   is_subtree(binary_trees_t* tree_1, binary_trees_t* tree_2);
-void   print_all(binary_trees_t* self);
+void    insert(binary_trees_t* self, int X);
+void    delete(binary_trees_t* self, int X);
+uint8_t search(binary_trees_t* self, int X);
+int     max_value(binary_trees_t* self);
+int     min_value(binary_trees_t* self);
+void    size_tree(binary_trees_t* self);
+void    height_tree(binary_trees_t* self);
+void    inorder(binary_trees_t* self);
+void    preorder(binary_trees_t* self);
+void    postorder(binary_trees_t* self);
+void    clear(binary_trees_t* self);
+void    kth_min(binary_trees_t* self, int K);
+void    kth_max(binary_trees_t* self, int K);
+void    count_range(binary_trees_t* self, int L, int R);
+void    range_query(binary_trees_t* self, int L, int R);
+void    lca(binary_trees_t* self, int X, int Y);
+void    predecessor(binary_trees_t* self, int X);
+void    successor(binary_trees_t* self, int X);
+void    mirror(binary_trees_t* self);
+void    copy(binary_trees_t* src, binary_trees_t* dest);
+void    merge(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
+void    intersect(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest);
+void    is_subtree(binary_trees_t* tree_1, binary_trees_t* tree_2);
+void    print_all(binary_trees_t* self);
 
 typedef enum
 {
@@ -85,7 +85,7 @@ struct binary_trees
 
     void    (*insert)(binary_trees_t* self, int X);
     void    (*delete)(binary_trees_t* self, int X);
-    void    (*search)(binary_trees_t* self, int X);
+    uint8_t (*search)(binary_trees_t* self, int X);
     int     (*max_value)(binary_trees_t* self);
     int     (*min_value)(binary_trees_t* self);
     void    (*size_tree)(binary_trees_t* self);
@@ -268,7 +268,7 @@ void delete(binary_trees_t* self, int X)
     }
 }
 
-void search(binary_trees_t* self, int X)
+uint8_t search(binary_trees_t* self, int X)
 {
     node_t* tmp_ptr = self->root;
 
@@ -278,12 +278,11 @@ void search(binary_trees_t* self, int X)
         } else if(tmp_ptr->data < X) {
             tmp_ptr = tmp_ptr->right;
         } else {
-            printf("found\n");
-            return;
+            return 1;
         }
     }
 
-    printf("not found\n");
+    return 0;
 }
 
 int max_value(binary_trees_t* self)
@@ -520,20 +519,21 @@ void count_range(binary_trees_t* self, int L, int R)
     printf("%zu\n", count_range_node(self->root, L, R));
 }
 
-void range_query_node(node_t* node, int L, int R)
+void range_query_node(node_t* node, int L, int R, int* found)
 {
     if(node == NULL) {
         return;
     }
 
     if(node->data < L) {
-        range_query_node(node->right, L, R);
+        range_query_node(node->right, L, R, found);
     } else if(node->data > R) {
-        range_query_node(node->left, L, R);
+        range_query_node(node->left, L, R, found);
     } else {
-        range_query_node(node->right, L, R);
+        range_query_node(node->left, L, R, found);
         printf("%d ", node->data);
-        range_query_node(node->left, L, R);
+        *found = 1;
+        range_query_node(node->right, L, R, found);
     }
 }
 
@@ -544,15 +544,42 @@ void range_query(binary_trees_t* self, int L, int R)
         return;
     }
 
-    range_query_node(self->root, L, R);
+    int found = 0;
+    range_query_node(self->root, L, R, &found);
+
+    if(found == 0) {
+        printf("empty");
+    }
+
     printf("\n");
 }
 
 void lca(binary_trees_t* self, int X, int Y)
 {
-    (void)self;
-    (void)X;
-    (void)Y;
+    if (self->root == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    if(!search(self, X) || !search(self, Y)) {
+        printf("error\n");
+        return;
+    }
+
+    node_t* tmp_ptr = self->root;
+
+    while(tmp_ptr != NULL) {
+        if(X < tmp_ptr->data && Y < tmp_ptr->data) {
+            tmp_ptr = tmp_ptr->left;
+        } else if(X > tmp_ptr->data && Y > tmp_ptr->data) {
+            tmp_ptr = tmp_ptr->right;
+        } else {
+            printf("%d\n", tmp_ptr->data);
+            return;
+        }
+    }
+
+
     printf("error\n");
 }
 
@@ -705,7 +732,10 @@ int main(void)
             }
 
             value = atoi(args[2]);
-            woodland[tree_type].search(&woodland[tree_type], value);
+            if(!woodland[tree_type].search(&woodland[tree_type], value)){
+                printf("not found\n");
+            } else printf("found\n");
+
             break;
 
         case CMD_MIN:
