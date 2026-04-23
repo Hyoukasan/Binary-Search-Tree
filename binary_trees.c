@@ -593,6 +593,44 @@ void predecessor(binary_trees_t* self, int X)
             current_node = current_node->left;
         } else if(X > current_node->data) {
             parent_node  = current_node;
+            current_node = current_node->right;
+        } else break;
+    }
+
+    if(current_node == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    if (current_node->left != NULL) {
+        current_node = current_node->left;
+
+        while (current_node->right != NULL) {
+            current_node = current_node->right;
+        }
+
+        printf("%d\n", current_node->data);
+        return;
+    } 
+    
+    if (parent_node == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    printf("%d\n", parent_node->data);
+}
+
+void successor(binary_trees_t* self, int X)
+{
+    node_t* current_node = self->root;
+    node_t* parent_node = NULL;
+
+    while(current_node != NULL) {
+        if(X > current_node->data) {
+            current_node = current_node->right;
+        } else if(X < current_node->data) {
+            parent_node  = current_node;
             current_node = current_node->left;
         } else break;
     }
@@ -602,22 +640,47 @@ void predecessor(binary_trees_t* self, int X)
         return;
     }
 
-    if(current_node->left != NULL) {
-        pruntf("%d\n", current_node->left);
-    } else printf("%d\n", parent_node);
+    if (current_node->right != NULL) {
+        current_node = current_node->right;
+
+        while (current_node->left != NULL) {
+            current_node = current_node->left;
+        }
+
+        printf("%d\n", current_node->data);
+        return;
+    } 
+    
+    if (parent_node == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    printf("%d\n", parent_node->data);
 }
 
-void successor(binary_trees_t* self, int X)
+void mirror_node(node_t* node)
 {
-    (void)self;
-    (void)X;
-    printf("error\n");
+    if(node == NULL) {
+        return;
+    }
+
+    node_t* tmp_ptr = node->left;
+    node->left = node->right;
+    node->right = tmp_ptr;
+
+    mirror_node(node->left);
+    mirror_node(node->right);
 }
 
 void mirror(binary_trees_t* self)
 {
-    (void)self;
-    printf("error\n");
+    if(self->root == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    mirror_node(self->root);
 }
 
 void copy(binary_trees_t* src, binary_trees_t* dest)
