@@ -683,11 +683,30 @@ void mirror(binary_trees_t* self)
     mirror_node(self->root);
 }
 
+void copy_node(node_t* src, binary_trees_t* dest)
+{
+    if(src == NULL) {
+        return;
+    }
+
+    dest->insert(&dest, src->data);
+    copy(src->left, dest);
+    copy(src->right, dest);
+}
+
 void copy(binary_trees_t* src, binary_trees_t* dest)
 {
-    (void)src;
-    (void)dest;
-    printf("error\n");
+    if (src == dest) {
+        return;
+    }
+
+    dest->clear(&dest);
+
+    if(src->root == NULL) {
+        return;
+    }
+
+    copy_node(src, dest);
 }
 
 void merge(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
