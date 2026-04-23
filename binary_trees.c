@@ -585,9 +585,26 @@ void lca(binary_trees_t* self, int X, int Y)
 
 void predecessor(binary_trees_t* self, int X)
 {
-    (void)self;
-    (void)X;
-    printf("error\n");
+    node_t* current_node = self->root;
+    node_t* parent_node = NULL;
+
+    while(current_node != NULL) {
+        if(X < current_node->data) {
+            current_node = current_node->left;
+        } else if(X > current_node->data) {
+            parent_node  = current_node;
+            current_node = current_node->left;
+        } else break;
+    }
+
+    if(current_node == NULL) {
+        printf("error\n");
+        return;
+    }
+
+    if(current_node->left != NULL) {
+        pruntf("%d\n", current_node->left);
+    } else printf("%d\n", parent_node);
 }
 
 void successor(binary_trees_t* self, int X)
