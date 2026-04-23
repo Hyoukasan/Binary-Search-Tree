@@ -689,7 +689,7 @@ void copy_node(node_t* src, binary_trees_t* dest)
         return;
     }
 
-    dest->insert(&dest, src->data);
+    dest->insert(dest, src->data);
     copy(src->left, dest);
     copy(src->right, dest);
 }
@@ -709,12 +709,27 @@ void copy(binary_trees_t* src, binary_trees_t* dest)
     copy_node(src, dest);
 }
 
+void merge_node(node_t* node, binary_trees_t* dest)
+{
+    if (node == NULL) {
+        return;
+    }
+
+    dest->insert(dest, node->data);
+    merge_node(node->left, dest);
+    merge_node(node->right, dest);
+}
+
 void merge(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
 {
-    (void)src_1;
-    (void)src_2;
-    (void)dest;
-    printf("error\n");
+    if (dest == src_1 || dest == src_2) {
+        printf("error\n");
+        return;
+    }
+
+    dest->clear(dest);
+    merge_node(src_1->root, dest);
+    merge_node(src_2->root, dest);
 }
 
 void intersect(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
