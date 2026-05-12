@@ -186,6 +186,30 @@ void tree_init(binary_trees_t* tree)
     tree->is_subtree  = is_subtree;
 }
 
+void size_tree(binary_trees_t* self)
+{
+    printf("%zu\n", self->size);
+}
+
+void height_tree(binary_trees_t* self)
+{
+    printf("%zu\n", self->height);
+}
+
+size_t height_counter(node_t* node) 
+{
+    if(node == NULL) {
+        return 0;
+    }
+
+    size_t left_node = height_counter(node->left);
+    size_t right_node = height_counter(node->right);
+
+    size_t max_height = left_node > right_node ? left_node : right_node;
+    
+    return 1 + max_height;
+}
+
 node_t* create_node(int data)
 {
     node_t* new_node = (node_t*)malloc(sizeof(node_t));
@@ -223,6 +247,8 @@ void insert(binary_trees_t* self, int X)
             self->height = depth;
         }
     }
+
+    self->height = height_counter(self->root);
 }
 
 node_t* find_min_node(node_t* node)
@@ -260,12 +286,49 @@ void delete(binary_trees_t* self, int X)
     }
 
     if(current_ptr->left != NULL && current_ptr->right != NULL) {
+        node_t* succ_ptr = current_ptr->right;
+        node_t* parent_succ = current_ptr;
+        
+        while (succ_ptr->left != NULL){
+            parent_succ = succ_ptr;
+            succ_ptr = succ_ptr->left;
+        }
 
+        current_ptr->data = succ_ptr->data;
+
+        if(parent_succ->left == succ_ptr) {
+            parent_succ->left = succ_ptr->right;
+        } else parent_succ->right = succ_ptr->right;
+
+        free(succ_ptr);
+        
     } else if(current_ptr->left != NULL || current_ptr->right != NULL) {
+        node_t* child = (current_ptr->left != NULL) ? current_ptr->left : current_ptr->right;
 
+        if(parent == NULL) {
+            self->root = child;
+        } else if(parent->left == current_ptr) {
+            parent->left = child;
+        } else parent->right = child;
+        
+        free(current_ptr);
     } else {
+        if(parent != NULL) {
 
+            if(parent->left == current_ptr) {
+                parent->left = NULL;
+            } else parent->right = NULL;
+
+            free(current_ptr);
+        } else {
+            self->root = NULL;
+            free(current_ptr);
+        }
+    
     }
+
+    self->size--;
+    self->height = height_counter(self->root);
 }
 
 uint8_t search(binary_trees_t* self, int X)
@@ -379,16 +442,6 @@ void postorder(binary_trees_t* self)
 
     postorder_node(self->root);
     printf("\n");
-}
-
-void size_tree(binary_trees_t* self)
-{
-    printf("%zu\n", self->size);
-}
-
-void height_tree(binary_trees_t* self)
-{
-    printf("%zu\n", self->height);
 }
 
 void clear_node(node_t* node)
@@ -690,8 +743,8 @@ void copy_node(node_t* src, binary_trees_t* dest)
     }
 
     dest->insert(dest, src->data);
-    copy(src->left, dest);
-    copy(src->right, dest);
+    copy_node(src->left, dest);
+    copy_node(src->right, dest);
 }
 
 void copy(binary_trees_t* src, binary_trees_t* dest)
@@ -700,13 +753,13 @@ void copy(binary_trees_t* src, binary_trees_t* dest)
         return;
     }
 
-    dest->clear(&dest);
+    dest->clear(dest);
 
     if(src->root == NULL) {
         return;
     }
 
-    copy_node(src, dest);
+    copy_node(src->root, dest);
 }
 
 void merge_node(node_t* node, binary_trees_t* dest)
@@ -715,21 +768,25 @@ void merge_node(node_t* node, binary_trees_t* dest)
         return;
     }
 
-    dest->insert(dest, node->data);
     merge_node(node->left, dest);
+    dest->insert(dest, node->data);
     merge_node(node->right, dest);
 }
 
 void merge(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
 {
-    if (dest == src_1 || dest == src_2) {
-        printf("error\n");
+    if(src_1->root == NULL && src_2->root == NULL) {
+        printf("empty\n");
         return;
     }
 
     dest->clear(dest);
+
     merge_node(src_1->root, dest);
     merge_node(src_2->root, dest);
+
+    dest->clear(src_1);
+    dest->clear(src_2);
 }
 
 void intersect(binary_trees_t* src_1, binary_trees_t* src_2, binary_trees_t* dest)
